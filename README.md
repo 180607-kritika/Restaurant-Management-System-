@@ -39,28 +39,5 @@ A console-based **Restaurant Management System** developed in **C** using file h
 | `rest.txt`       | Customer records  |
 | `product.txt`    | Product details   |
 
----
 
-## How to Run
-
-```bash
-gcc restaurant.c -o restaurant
-./restaurant
-```
-
----
-
-
-## Future Enhancements
-
-* Replace unsafe input functions
-* Implement stock updates
-* Add order history
-* Improve security and UI
-
----
-
-
-
-If you want, I can also **shorten this further to one page**, or format it to match a **college project template**.
 
