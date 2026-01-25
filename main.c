@@ -128,6 +128,90 @@ void viewMenu()
 
     fclose(fp);
 }
+void deleteFood()
+{
+    struct Menu m;
+    int id, found = 0;
+
+    FILE *fp = fopen("menu.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (fp == NULL)
+    {
+        printf("\nMenu file not found!\n");
+        return;
+    }
+
+    printf("\nEnter Food ID to delete: ");
+    scanf("%d", &id);
+
+    while (fread(&m, sizeof(m), 1, fp))
+    {
+        if (m.id == id)
+        {
+            found = 1;   // skip writing (delete)
+        }
+        else
+        {
+            fwrite(&m, sizeof(m), 1, temp);
+        }
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("menu.txt");
+    rename("temp.txt", "menu.txt");
+
+    if (found)
+        printf("\nFood item deleted successfully!\n");
+    else
+        printf("\nFood ID not found!\n");
+}
+void updateFood()
+{
+    struct Menu m;
+    int id, found = 0;
+
+    FILE *fp = fopen("menu.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (fp == NULL)
+    {
+        printf("\nMenu file not found!\n");
+        return;
+    }
+
+    printf("\nEnter Food ID to update: ");
+    scanf("%d", &id);
+
+    while (fread(&m, sizeof(m), 1, fp))
+    {
+        if (m.id == id)
+        {
+            found = 1;
+
+            printf("New Food Name: ");
+            scanf("%s", m.name);
+
+            printf("New Price: ");
+            scanf("%d", &m.price);
+        }
+
+        fwrite(&m, sizeof(m), 1, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("menu.txt");
+    rename("temp.txt", "menu.txt");
+
+    if (found)
+        printf("\nFood item updated successfully!\n");
+    else
+        printf("\nFood ID not found!\n");
+}
 
 /* ================= CUSTOMER FUNCTIONS ================= */
 
@@ -263,90 +347,6 @@ void placeOrder()
     printf("\n================ BILL =================");
     printf("\nTotal Amount: %d", total);
     printf("\nThank you! Visit again.\n");
-}
-void deleteFood()
-{
-    struct Menu m;
-    int id, found = 0;
-
-    FILE *fp = fopen("menu.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
-
-    if (fp == NULL)
-    {
-        printf("\nMenu file not found!\n");
-        return;
-    }
-
-    printf("\nEnter Food ID to delete: ");
-    scanf("%d", &id);
-
-    while (fread(&m, sizeof(m), 1, fp))
-    {
-        if (m.id == id)
-        {
-            found = 1;   // skip writing (delete)
-        }
-        else
-        {
-            fwrite(&m, sizeof(m), 1, temp);
-        }
-    }
-
-    fclose(fp);
-    fclose(temp);
-
-    remove("menu.txt");
-    rename("temp.txt", "menu.txt");
-
-    if (found)
-        printf("\nFood item deleted successfully!\n");
-    else
-        printf("\nFood ID not found!\n");
-}
-void updateFood()
-{
-    struct Menu m;
-    int id, found = 0;
-
-    FILE *fp = fopen("menu.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
-
-    if (fp == NULL)
-    {
-        printf("\nMenu file not found!\n");
-        return;
-    }
-
-    printf("\nEnter Food ID to update: ");
-    scanf("%d", &id);
-
-    while (fread(&m, sizeof(m), 1, fp))
-    {
-        if (m.id == id)
-        {
-            found = 1;
-
-            printf("New Food Name: ");
-            scanf("%s", m.name);
-
-            printf("New Price: ");
-            scanf("%d", &m.price);
-        }
-
-        fwrite(&m, sizeof(m), 1, temp);
-    }
-
-    fclose(fp);
-    fclose(temp);
-
-    remove("menu.txt");
-    rename("temp.txt", "menu.txt");
-
-    if (found)
-        printf("\nFood item updated successfully!\n");
-    else
-        printf("\nFood ID not found!\n");
 }
 
 /* ================= MAIN FUNCTION ================= */
