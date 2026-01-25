@@ -264,6 +264,90 @@ void placeOrder()
     printf("\nTotal Amount: %d", total);
     printf("\nThank you! Visit again.\n");
 }
+void deleteFood()
+{
+    struct Menu m;
+    int id, found = 0;
+
+    FILE *fp = fopen("menu.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (fp == NULL)
+    {
+        printf("\nMenu file not found!\n");
+        return;
+    }
+
+    printf("\nEnter Food ID to delete: ");
+    scanf("%d", &id);
+
+    while (fread(&m, sizeof(m), 1, fp))
+    {
+        if (m.id == id)
+        {
+            found = 1;   // skip writing (delete)
+        }
+        else
+        {
+            fwrite(&m, sizeof(m), 1, temp);
+        }
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("menu.txt");
+    rename("temp.txt", "menu.txt");
+
+    if (found)
+        printf("\nFood item deleted successfully!\n");
+    else
+        printf("\nFood ID not found!\n");
+}
+void updateFood()
+{
+    struct Menu m;
+    int id, found = 0;
+
+    FILE *fp = fopen("menu.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (fp == NULL)
+    {
+        printf("\nMenu file not found!\n");
+        return;
+    }
+
+    printf("\nEnter Food ID to update: ");
+    scanf("%d", &id);
+
+    while (fread(&m, sizeof(m), 1, fp))
+    {
+        if (m.id == id)
+        {
+            found = 1;
+
+            printf("New Food Name: ");
+            scanf("%s", m.name);
+
+            printf("New Price: ");
+            scanf("%d", &m.price);
+        }
+
+        fwrite(&m, sizeof(m), 1, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("menu.txt");
+    rename("temp.txt", "menu.txt");
+
+    if (found)
+        printf("\nFood item updated successfully!\n");
+    else
+        printf("\nFood ID not found!\n");
+}
 
 /* ================= MAIN FUNCTION ================= */
 
@@ -298,7 +382,9 @@ int main()
                     printf("\n--- ADMIN PANEL ---");
                     printf("\n1. Add Food Item");
                     printf("\n2. View Menu");
-                    printf("\n0. Logout");
+                    printf("\n3. Delete Item");
+                    printf("\n4. Ugrade Item");
+                    printf("\n0. Exit...");
                     printf("\nChoice: ");
                     scanf("%d", &adminChoice);
 
@@ -306,6 +392,10 @@ int main()
                         addFood();
                     else if (adminChoice == 2)
                         viewMenu();
+                    else if (adminChoice == 3)
+                        deleteFood();
+                    else if (adminChoice == 4)
+                        updateFood();    
 
                 } while (adminChoice != 0);
             }
